@@ -2,8 +2,7 @@ require('dotenv').config(); // Load biến môi trường từ .env
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-import Stock from "./stock";
-
+const Stock = require("./stock"); // Import model Stock
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -51,8 +50,19 @@ app.post("/stocks", async (req, res) => {
     }
 });
 
+// 🟢 API: Thêm danh sách stocks mới
+app.post("/stocks", async (req, res) => {
+    try {
+        const stocks = req.body;
+        const savedStocks = await Stock.insertMany(stocks);
+        res.status(201).json({ message: "Stocks added", stocks: savedStocks });
+    } catch (error) {
+        res.status(400).json({ message: "Lỗi khi thêm danh sách stocks", error });
+    }
+});
+
 // 🟢 API: Xóa stock
-app.delete("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
+app.delete("/stocks/:id", async (req, res) => {
     try {
         await Stock.findByIdAndDelete(req.params.id);
         res.json({ message: "Stock deleted" });
@@ -62,7 +72,7 @@ app.delete("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
 });
 
 // 🟢 API: Cập nhật stock
-app.put("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
+app.put("/stocks/:id", async (req, res) => {
     try {
         const updatedStock = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json({ message: "Stock updated", stock: updatedStock });
@@ -73,5 +83,5 @@ app.put("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
 
 // Khởi động server
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on https://study-be-zj58.onrender.com`);
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
