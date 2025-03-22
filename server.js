@@ -2,23 +2,11 @@ require('dotenv').config(); // Load biến môi trường từ .env
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const Stock = require("./stock.ts"); // Import model Stock
+const Stock = require("./stock"); // Import model Stock
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI;
-
-const newStock = new Stock({
-    name: "Test Stock",
-    code: "TST",
-    price: 50,
-    previousPrice: 45,
-    exchange: "NYSE",
-    favorite: false
-});
-newStock.save()
-    .then(() => console.log("✅ Thêm dữ liệu thành công"))
-    .catch(err => console.error("❌ Lỗi khi thêm dữ liệu:", err));
 
 if (!MONGO_URI) {
   console.error("❌ MONGO_URI is not defined. Please check your .env file.");
@@ -63,7 +51,7 @@ app.post("/stocks", async (req, res) => {
 });
 
 // 🟢 API: Xóa stock
-app.delete("stocks/:id", async (req, res) => {
+app.delete("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
     try {
         await Stock.findByIdAndDelete(req.params.id);
         res.json({ message: "Stock deleted" });
@@ -73,7 +61,7 @@ app.delete("stocks/:id", async (req, res) => {
 });
 
 // 🟢 API: Cập nhật stock
-app.put("stocks/:id", async (req, res) => {
+app.put("/stocks/:id", async (req, res) => {  // 🛠 ĐÃ FIX LỖI
     try {
         const updatedStock = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json({ message: "Stock updated", stock: updatedStock });
@@ -84,5 +72,5 @@ app.put("stocks/:id", async (req, res) => {
 
 // Khởi động server
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on https://study-be-zj58.onrender.com`);
 });
