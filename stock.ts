@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Định nghĩa Schema cho Stock
 const stockSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     name: { type: String, required: true },
