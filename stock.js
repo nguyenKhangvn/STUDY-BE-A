@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 
 const stockSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
@@ -13,4 +13,4 @@ const stockSchema = new mongoose.Schema({
 // Tạo Model từ Schema
 const Stock = mongoose.model("stock", stockSchema);
 
-module.exports = Stock;
+export default Stock; 
